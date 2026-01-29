@@ -1,0 +1,31 @@
+# Core ML inference
+tensorflow>=2.13,<2.17
+
+# Data / arrays
+numpy>=1.24,<2.0
+pandas>=2.0
+
+# Visualization
+matplotlib>=3.7
+seaborn>=0.12
+
+# Image handling
+pillow>=10.0
+opencv-python-headless>=4.8
+
+# Streamlit 
+streamlit>=1.34,<1.42   
+
+# PDF generation
+fpdf2>=2.5.7            # Modern fork of fpdf, easier, no system deps, pure Python
+# OR reportlab>=4.0 
+
+# Optional / only if you actually use them
+# scikit-learn>=1.2     # if you compute metrics or use LabelEncoder in app
+# requests>=2.32        # if fetching anything external
+
+# If you decide to keep FastAPI (see below)
+# fastapi>=0.114
+# uvicorn[standard]>=0.23
+# python-multipart          # for file uploads in FastAPI
+# httpx                     # for async testing/clients
