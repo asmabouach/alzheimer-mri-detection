@@ -351,12 +351,9 @@ if uploaded_file is not None:
 else:
     st.info("Please upload an MRI image to start the analysis.")
 
+# ------------------- Footer -------------------
 st.markdown("---")
-st.markdown(
-    '<div style="text-align: center; color: #666666; font-size: 0.9em;">'
-    '<a href="https://github.com/asmabouach/alzheimer_mri_detection" target="_blank" '
-    'style="color: #3498db; text-decoration: none;">GitHub Repository</a>'
-    ' • Built by Asma Bouach • 2026'
-    '</div>',
-    unsafe_allow_html=True
+st.caption(
+    "Alzheimer’s MRI Diagnostic Tool • v1.1 (lite) • 2026 • "
+    "Developed by Asma Bouach"
 )
