@@ -21,7 +21,7 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         context: .
-        push: false          # don't push to registry — just build
+        push: false          
         tags: alzheimer-mri:ci-test
         cache-from: type=gha
         cache-to: type=gha,mode=max
