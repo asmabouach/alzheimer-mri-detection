@@ -108,8 +108,10 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## ⚠️ Ethical & Dataset Disclaimer
 
-Not a medical device and does not replace professional diagnosis.
-Educational/portfolio use only.
+This is **not** a medical device and does **not** replace professional diagnosis.  
+Use only for **educational and portfolio purposes**.
 
 Dataset limitations: no patient-level split (risk of leakage), limited diversity, no metadata.  
-Accuracies likely inflated vs real clinical settings.
+Accuracies likely inflated vs real clinical settings. 
+This is an **educational engineering and deployment demonstration**, not clinical research.
+
