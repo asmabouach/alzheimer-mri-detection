@@ -10,6 +10,11 @@ import io
 import os
 
 # -------------------------------
+# Page config
+# -------------------------------
+st.set_page_config(page_title="Alzheimer’s MRI Diagnostic Tool", page_icon="🧠", layout="centered")
+
+# -------------------------------
 # Load model (cached for speed)
 # -------------------------------
 @st.cache_resource
@@ -21,9 +26,8 @@ model = load_my_model()
 CLASSES = ["Mild Demented", "Moderate Demented", "Non Demented", "Very Mild Demented"]
 
 # -------------------------------
-# Page config & custom styling
+# Custom styling
 # -------------------------------
-st.set_page_config(page_title="Alzheimer’s MRI Diagnostic Tool", page_icon="🧠", layout="centered")
 
 st.markdown("""
     <style>
