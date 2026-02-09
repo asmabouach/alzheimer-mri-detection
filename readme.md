@@ -1,138 +1,115 @@
 # 🧠 Alzheimer MRI Detection
+**Version 1.1 (lite): Streamlit-only, stateless (2026)**  
+Original full-stack version (FastAPI + DB) was v1.0
 
-An end-to-end deep learning project for detecting Alzheimer’s disease stages from MRI scans using a Custom CNN, FastAPI, Streamlit, SQLite, pytest, and Docker.
+An end-to-end deep learning project for classifying Alzheimer’s disease stages from brain MRI scans using a custom CNN model, with an interactive Streamlit web app and PDF report export.
 
-## 🏗️ Architecture
-
-| 📂 Data | ➡️ | 🔧 Preprocessing | ➡️ | 🧠 Model Training | ➡️ | 📊 Evaluation | ➡️ | ⚡ Serving | ➡️ | 🐳 Deployment |
-|---------|------|------------------|------|-------------------|------|---------------|------|-----------|------|---------------|
-| MRI images | ➡️| Resizing, normalization, augmentation |➡️ | Custom CNN, EfficientNetB0, DenseNet121 | ➡️| Accuracy, AUC, loss, F1-score, MCC |➡️ | FastAPI (predict, save, history), Streamlit UI |➡️ | Docker (API + Streamlit), CI with GitHub Actions |
+**🌐 Live Demo**: [https://asma-b-alzheimer-mri-detection.streamlit.app](https://asma-b-alzheimer-mri-detection.streamlit.app)
 
 
-## 🎯 Overview
+## 🏗️ Project Flow
+
+| 📂 Data| ➡️ | 🔧 Preprocessing | ➡️ | 🧠 Model Training | ➡️ | 📊 Evaluation| ➡️ | ⚡ Serving| ➡️ | 🐳 Deployment|
+|--------|----|------------|----|------------|----|-----------|----|--------|----|-----|
+| MRI images (4 classes)   | ➡️ | Resizing to 128×128, grayscale → RGB, normalization | ➡️ | Custom CNN, EfficientNetB0, DenseNet121, ResNet50 | ➡️ | Accuracy, Loss, Macro F1, MCC, per-class metrics | ➡️ | Streamlit UI  | ➡️ | Docker |
+
+
+## 🎯 Project Overview
 
 - **Task**: Classify MRI scans into four Alzheimer’s stages: Non Demented, Very Mild Demented, Mild Demented, Moderate Demented.
-- **Data**: MRI images in `train/` and `test/` folders.
-- **Goal**: Predict stages, save records, and provide a user-friendly interface for doctors.
+- **Deployed model**: Custom CNN (98.33% test accuracy)
+- **Frontend**: Streamlit app for image upload, prediction, confidence visualization, saliency maps for interpretability, and downloadable PDF summary report
+- **Interpretability**: Saliency maps to show which brain regions influenced the prediction
+<details>
+<summary>App Screenshot (click to view)</summary>
 
-## 🚀 Features
+**Streamlit interface**: image upload, prediction, confidence chart, saliency map, and PDF report export  
+![App Screenshot](img/alzheimer_mri_detection_app.png)
 
-- **Model**: Custom CNN, compared with EfficientNetB0 and DenseNet121.
-- **FastAPI Backend**:
-  - `POST /predict`: Predict stage from MRI.
-  - `POST /save_record`: Save results to SQLite.
-  - `GET /history/{patient_id}`: Retrieve patient history.
-- **Streamlit Frontend**: Upload images, view predictions, and export PDF reports to the `output/` directory.
+</details>
 
-  ![Streamlit Interface with Prediction Results](img/streamlit_screenshot.png)
-- **Database**: SQLite for patient records.
-- **Testing**: Pytest for API and preprocessing.
-- **Containerization**: Docker and Docker Compose.
+## 📊 Model Comparison
 
-## 📊 Model Performance
+| Model              | Test Accuracy | Test Loss | Macro F1 | MCC    |
+|--------------------|---------------|-----------|----------|--------|
+| **ResNet50 (baseline)**| 98.75%        | 0.0453    | 0.9793   | 0.9794 |
+| **DenseNet121**        | 96.56%        | 0.1293    | 0.9602   | 0.9432 |
+| **EfficientNetB0**     | 91.87%        | 0.2442    | 0.9093   | 0.8653 |
+| **🏆 Custom CNN** | **98.33%**    | **0.0676** | **0.9848** | **0.9725** |
 
-| Model          | Accuracy | Loss | AUC  | F1-score | MCC  |
-|----------------|----------|------|------|----------|------|
-| Custom CNN     | **0.97**     | **0.07** | **0.99** | **0.98**     | **0.96** |
-| EfficientNetB0 | 0.95     | 0.12 | 0.99 | 0.95     | 0.92 |
-| DenseNet121    | 0.76     | 0.52 | 0.94 | 0.76     | 0.61 |
-
-> **Note**: ⭐ Custom CNN selected for deployment.
-
-## 🛠️ Technologies
-
-- **Deep Learning**: TensorFlow, Keras
-- **Backend**: FastAPI
-- **Frontend**: Streamlit
-- **Database**: SQLite
-- **Testing**: Pytest
-- **Containerization**: Docker, Docker Compose
+> **Full training details** (curves, per-class recall/precision/F1, confusion matrice, ROC curves, best epochs, etc.) are available in the Jupyter notebook → [`notebook/`](./notebook)
 
 ## 📦 Installation
 
-1. **Clone Repository**:
-   ```bash
-   git clone https://github.com/yourusername/alzheimer_mri_detection.git
-   cd alzheimer_mri_detection
-   ```
+1. **Download Dataset**:
+   - Get from: [Alzheimer MRI Preprocessed Dataset](https://www.kaggle.com/datasets/sachinkumar413/alzheimer-mri-dataset)
+   - After downloading and extracting the archive (which may be named `archive.zip`), locate the folder named `Dataset`. Inside it, you will find the `Mild_Demented/`, `Moderate_Demented/`, `Non_Demented/`, and `Very_Mild_Demented/` directories.
 
-2. **Download Dataset**:
-   - Get from: [Best Alzheimer MRI Dataset](https://www.kaggle.com/datasets/lukechugh/best-alzheimer-mri-dataset-99-accuracy)
-   - After downloading and extracting the archive (which may be named `archive.zip`), locate the folder named `combined data`. Inside it, you will find the `train/` and `test/` directories.
-
-    - Copy or move these `train/` and `test/` folders directly into the `data/` directory of this repository.
+    - Copy or move these folders directly into the `data/dataset/` directory of this repository.
 
     Your project directory structure should be like:
 
     ```
     data/
-    ├── train/
-    │   ├── (category folders with training images)
-    ├── test/
-    │   ├── (category folders with testing images)
+    ├── dataset/
+    │   ├── Mild_Demented/
+    │   ├── Moderate_Demented/
+    │   ├── Non_Demented/
+    │   └── Very_Mild_Demented/
+
     ```
-3. **Run Options**:
+2. **Run Options**:
 
-   **Option A: Local**
-   - Create and activate a virtual environment:
-     ```bash
-     # On macOS/Linux
-     python3 -m venv venv
-     source venv/bin/activate
+    **Option A: Local**
+    - Create and activate a virtual environment:
+      ```bash
+      # On macOS/Linux
+      python3.10 -m venv .venv
+      source .venv/bin/activate
 
-     # On Windows
-     python -m venv venv
-     venv\Scripts\activate
-     ```
-   - Install dependencies:
-     ```bash
-     pip install -r requirements.txt
-     ```
-   - Run FastAPI:
-     ```bash
-     uvicorn api:app --host 0.0.0.0 --port 8001
-     ```
-     API at [http://localhost:8001/docs](http://localhost:8001/docs).
-   - Run Streamlit:
-     ```bash
-     streamlit run app.py
-     ```
-     UI at [http://localhost:8501](http://localhost:8501).
+      # On Windows
+      py -3.10 -m venv .venv
+      .venv\Scripts\activate
+      ```
+    - Install dependencies:
+      ```bash
+      pip install -r requirements.txt --default-timeout=1000
+      ```
+    - Run the streamlit app:
+      ```bash
+      streamlit run app.py
+      ```
 
-   **Option B: Docker**
-   - Build and run:
-     ```bash
-     docker compose up --build
-     ```
-     - API: [http://localhost:8001](http://localhost:8001)
-     - Streamlit: [http://localhost:8501](http://localhost:8501)
-   - Detached mode:
-     ```bash
-     docker compose up -d
-     ```
-   - Stop:
-     ```bash
-     docker compose down
-     ```
+    **Option B: Docker**
+    - Build and run:
+      ```bash
+      # Build the image
+      docker build -t alzheimer-mri .
 
-## 🧪 Testing
+      # Run it
+      docker run -p 8501:8501 alzheimer-mri
+      ```
 
-Run unit tests:
-```bash
-pytest
-```
-## 📂 Data Attribution
+>  Open browser at: [http://localhost:8501](http://localhost:8501)
 
-This project uses the [Best Alzheimer MRI Dataset (99% Accuracy)](https://www.kaggle.com/datasets/lukechugh/best-alzheimer-mri-dataset-99-accuracy) from Kaggle, licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0). Attribution: Dataset by Luke Chugh (© 2023). See the [LICENSE](https://www.kaggle.com/datasets/lukechugh/best-alzheimer-mri-dataset-99-accuracy/license) for full terms.
+## 📜 Attribution & License
 
+### Dataset
+This project uses the [Alzheimer MRI Preprocessed Dataset](https://www.kaggle.com/datasets/sachinkumar413/alzheimer-mri-dataset) from Kaggle, licensed under the [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). Attribution: Dataset by Sachin Kumar.
+
+### Project License
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## 📚 References
 
-- [FastAPI Docs](https://fastapi.tiangolo.com/)
 - [Streamlit Docs](https://docs.streamlit.io/)
 - [TensorFlow Docs](https://www.tensorflow.org/)
 - [Docker Python Guide](https://docs.docker.com/language/python/)
 
-## 📜 License
+## ⚠️ Ethical & Dataset Disclaimer
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+Not a medical device and does not replace professional diagnosis.
+Educational/portfolio use only.
+
+Dataset limitations: no patient-level split (risk of leakage), limited diversity, no metadata.  
+Accuracies likely inflated vs real clinical settings.
