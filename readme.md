@@ -4,7 +4,7 @@ Original full-stack version (FastAPI + DB) was v1.0
 
 An end-to-end deep learning project for classifying Alzheimer’s disease stages from brain MRI scans using a custom CNN model, with an interactive Streamlit web app and PDF report export.
 
-**🌐 Live Demo**: [https://asma-b-alzheimer-mri-detection.streamlit.app](https://asma-b-alzheimer-mri-detection.streamlit.app)
+**🌐 Live Demo**: [https://alzheimer-mri-detection.streamlit.app](https://alzheimer-mri-detection.streamlit.app)
 
 
 ## 🏗️ Project Flow
