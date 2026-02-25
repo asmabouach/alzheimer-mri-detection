@@ -18,14 +18,18 @@ jobs:
       uses: docker/setup-buildx-action@v3
 
     - name: Build Docker image
+      id: build
       uses: docker/build-push-action@v6
       with:
         context: .
-        push: false          
+        push: false
         tags: alzheimer-mri:ci-test
         cache-from: type=gha
         cache-to: type=gha,mode=max
+        outputs: type=docker,dest=/tmp/alzheimer-mri.tar  # save to file
 
-    - name: Test Docker image (optional smoke test)
-      run: |
-        docker run --rm alzheimer-mri:ci-test streamlit --version
+    - name: Load Docker image
+      run: docker load --input /tmp/alzheimer-mri.tar
+
+    - name: Test Docker image (smoke test)
+      run: docker run --rm alzheimer-mri:ci-test streamlit --version
